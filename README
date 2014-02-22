@@ -1,0 +1,8 @@
+/* ############################################
+   Nightlight functionality on the Raspberry Pi
+   Written by Rushi for shits and giggles
+   ############################################ */
+
+
+   To Compile on Raspberry Pi:
+   gcc -ansi -pedantic -Wall -o i2c i2c.c i2c.h -lwiringPi
