@@ -120,6 +120,8 @@ void powerDownSensor(int fd){
 
 void readRawData(int fd, unsigned short int * rawVisible, unsigned short int * rawInfra){
     
+    /*conver to 16 bit read?*/
+    /*do we have to write the timing register?*/
     /*Do this as a struct & memset*/
     char temp;
     *rawVisible = 0;
@@ -128,18 +130,22 @@ void readRawData(int fd, unsigned short int * rawVisible, unsigned short int * r
     wiringPiI2CWrite(fd, I2C_SENSOR_SELECT_CH0_LOW_REG);
     temp = wiringPiI2CRead(fd);
     printf("CH0 Low: %x\n", (int)temp);
+    delay(403);
 
     wiringPiI2CWrite(fd, I2C_SENSOR_SELECT_CH0_HIGH_REG);
     temp = wiringPiI2CRead(fd);
     printf("CH0 High: %x\n", (int)temp);
+    delay(403);
 
     wiringPiI2CWrite(fd, I2C_SENSOR_SELECT_CH1_LOW_REG);
     temp = wiringPiI2CRead(fd);
     printf("CH1 Low: %x\n", (int)temp);
+    delay(403);
 
     wiringPiI2CWrite(fd, I2C_SENSOR_SELECT_CH1_HIGH_REG);
     temp= wiringPiI2CRead(fd);
     printf("CH1 High: %x\n", (int)temp);
+    delay(403);
 /*
 //Read the lower 8 bits
 //Write to DeviceConfigure command register - read mode & register to read
