@@ -13,7 +13,9 @@
 
 #define I2C_SENSOR_CMD_BIT (0x1 << 7)
 
-#ifdef 1
+#define FOR_IFDEF
+
+#ifdef FOR_IFDEF
 
 #define I2C_SENSOR_SELECT_ID_REG (0x1<<7) & (0x0A < 0)
 #define I2C_SENSOR_SELECT_CH0_LOW_REG (0x1<<7) & (0xC << 0)
