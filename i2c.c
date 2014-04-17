@@ -161,7 +161,7 @@ void printSensorId(int fd){
 
     int output;
     wiringPiI2CWrite(fd, I2C_SENSOR_ID_REG_ADDR);
-
+    delay(403);
     output = wiringPiI2CRead(fd);
     printf("Light Sensor ID: %x\n", output);
 
