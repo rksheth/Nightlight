@@ -27,7 +27,6 @@ int main(int argc, char * argv[]){
 
     powerUpSensor(fd);
     /*Light Sensor data is ready 400 ms after power on*/
-    delay(403);
     printSensorId(fd);
     /*make this a while(1) loop*/
     for(i = 0; i < 10; i++){
@@ -128,24 +127,24 @@ void readRawData(int fd, unsigned short int * rawVisible, unsigned short int * r
     *rawInfra = 0;
 
     wiringPiI2CWrite(fd, I2C_SENSOR_SELECT_CH0_LOW_REG);
+    delay(403);
     temp = wiringPiI2CRead(fd);
     printf("CH0 Low: %x\n", (int)temp);
-    delay(403);
 
     wiringPiI2CWrite(fd, I2C_SENSOR_SELECT_CH0_HIGH_REG);
+    delay(403);
     temp = wiringPiI2CRead(fd);
     printf("CH0 High: %x\n", (int)temp);
-    delay(403);
 
     wiringPiI2CWrite(fd, I2C_SENSOR_SELECT_CH1_LOW_REG);
+    delay(403);
     temp = wiringPiI2CRead(fd);
     printf("CH1 Low: %x\n", (int)temp);
-    delay(403);
 
     wiringPiI2CWrite(fd, I2C_SENSOR_SELECT_CH1_HIGH_REG);
+    delay(403);
     temp= wiringPiI2CRead(fd);
     printf("CH1 High: %x\n", (int)temp);
-    delay(403);
 /*
 //Read the lower 8 bits
 //Write to DeviceConfigure command register - read mode & register to read
