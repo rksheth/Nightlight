@@ -82,11 +82,11 @@ void powerUpSensor(int fd){
     output = wiringPiI2CRead(fd);
     if((output & 0x3) == payload)
     {
-        printf("Light Sensor Power on Successful! CMD REG: %x\n", output);
+        printf("Light Sensor Power up Successful! CTRL REG: %x\n", output);
     }
     else
     {
-        printf("Light Sensor Power on Failed!\n");
+        printf("Light Sensor Power up Failed!\n");
         printf("CTRL reg value = 0x%x.\n", output);
     }
 
@@ -107,11 +107,11 @@ void powerDownSensor(int fd){
     output = wiringPiI2CRead(fd);
     if((output & 0x3) == payload)
     {
-        printf("Light Sensor Power on Successful! CMD REG: %x\n", output);
+        printf("Light Sensor Power down Successful! CTRL REG: %x\n", output);
     }
     else
     {
-        printf("Light Sensor Power off Failed!\n");
+        printf("Light Sensor Power down Failed!\n");
         printf("CTRL reg value = %d.\n", output);
     }
 }
@@ -160,8 +160,11 @@ void readRawData(int fd, unsigned short int * rawVisible, unsigned short int * r
 void printSensorId(int fd){
 
     int output;
+    #ifdef 0
     wiringPiI2CWrite(fd, I2C_SENSOR_ID_REG_ADDR);
     output = wiringPiI2CRead(fd);
+    #else
+    output = wiringPiI2CReadReg8(fd, I2C_SENSOR_ID_REG_ADDR);
     printf("Light Sensor ID: %x\n", output);
 
 }
