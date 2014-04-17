@@ -11,6 +11,8 @@
 #define I2C_SENSOR_CMD_REG_ADDR
 #define I2C_SENSOR_CMD_REG_WRITE
 
+#define I2C_SENSOR_CMD_BIT (0x1 << 7)
+
 #ifdef 1
 
 #define I2C_SENSOR_SELECT_ID_REG (0x1<<7) & (0x0A < 0)
