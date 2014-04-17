@@ -160,12 +160,12 @@ void readRawData(int fd, unsigned short int * rawVisible, unsigned short int * r
 void printSensorId(int fd){
 
     int output;
-    #ifndef FOR_IFDEF
+    #ifdef FOR_IFDEF
     wiringPiI2CWrite(fd, I2C_SENSOR_ID_REG_ADDR);
     output = wiringPiI2CRead(fd);
     #else
-    output = wiringPiI2CReadReg8(fd, I2C_SENSOR_CMD_BIT | I2C_SENSOR_ID_REG_ADDR);
-    printf("Light Sensor ID: %x\n", output);
+    output = wiringPiI2CReadReg8(fd,I2C_SENSOR_CMD_BIT | I2C_SENSOR_ID_REG_ADDR);
     #endif
 
+    printf("Light Sensor ID: %x\n", output);
 }
