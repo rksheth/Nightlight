@@ -167,4 +167,6 @@ void printSensorId(int fd){
     output = wiringPiI2CReadReg8(fd, I2C_SENSOR_CMD_BIT | I2C_SENSOR_ID_REG_ADDR);
     printf("Light Sensor ID: %x\n", output);
 
+
 }
+
