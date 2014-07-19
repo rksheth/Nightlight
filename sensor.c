@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <inttypes.h>
-#include "wiringPi.h"
-#include "wiringPiI2C.h"
+#include <wiringPi.h>
+#include <wiringPiI2C.h>
 #include <errno.h>
 
-// ALL COMMAND TSL2561
-// Default I2C RPI address in (0x39) = FLOAT ADDR (Slave) Other [(0x49) = VCC ADDR / (0x29) = GROUND ADDR]
+/* ALL COMMAND TSL2561
+/ Default I2C RPI address in (0x39) = FLOAT ADDR (Slave) Other [(0x49) = VCC ADDR / (0x29) = GROUND ADDR]
+*/
 #define TSL2561_ADDR_LOW                   (0x29)
 #define TSL2561_ADDR_FLOAT                 (0x39)    
 #define TSL2561_ADDR_HIGH                   (0x49)
@@ -36,8 +37,9 @@
 #define TSL2561_REGISTER_CHAN0_HIGH           (0x8D)
 #define TSL2561_REGISTER_CHAN1_LOW            (0x8E)
 #define TSL2561_REGISTER_CHAN1_HIGH           (0x8F)
-//Delay getLux function
+/*Delay getLux function*/
 #define LUXDELAY 500
+
 
 int getLux(int fd){
    wiringPiI2CWriteReg8(fd, TSL2561_COMMAND_BIT, TSL2561_CONTROL_POWERON); //enable the device
@@ -51,13 +53,14 @@ int getLux(int fd){
 }
 
 void main(){
-     int fd = 0;
-    fd = wiringPiI2CSetup(TSL2561_ADDR_FLOAT);
-    int lux;
-    while(1){
-      lux = getLux(fd);
-      system ("tput clear");
-      printf("Lux: %d\n", lux);
+  int lux;
+  int fd = 0;
+  fd = wiringPiI2CSetup(TSL2561_ADDR_FLOAT);
 
-   }
+  while(1){
+    lux = getLux(fd);
+    /*system("tput clear");*/
+    printf("Lux: %d\n", lux);
+
+  }
 }
