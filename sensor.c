@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <inttypes.h>
-#include <wiringPi.h>
-#include <wiringPiI2C.h>
+#include "wiringPi.h"
+#include "wiringPiI2C.h"
 #include <errno.h>
 
 // ALL COMMAND TSL2561
@@ -58,5 +58,6 @@ void main(){
       lux = getLux(fd);
       system ("tput clear");
       printf("Lux: %d\n", lux);
+
    }
 }
