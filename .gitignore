@@ -1,2 +1,3 @@
 #We'll just ignore the binary for now
 i2c
+*.swp
