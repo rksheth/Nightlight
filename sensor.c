@@ -40,8 +40,8 @@
 /*Delay getLux function*/
 #define LUXDELAY 500
 
-#define TSL2561_POWERON(int fd) wiringPiI2CWriteReg8(fd, TSL2561_COMMAND_BIT, TSL2561_CONTROL_POWERON)
-#define TSL2561_POWEROFF(int fd) wiringPiI2CWriteReg8(fd, TSL2561_COMMAND_BIT, TSL2561_CONTROL_POWEROFF)
+#define TSL2561_POWERON(fd) wiringPiI2CWriteReg8(fd, TSL2561_COMMAND_BIT, TSL2561_CONTROL_POWERON)
+#define TSL2561_POWEROFF(fd) wiringPiI2CWriteReg8(fd, TSL2561_COMMAND_BIT, TSL2561_CONTROL_POWEROFF)
 
 int getLux(int fd){
   uint16_t visible_and_ir;
@@ -52,19 +52,19 @@ int getLux(int fd){
   delay(LUXDELAY);
   /*Reads visible + IR diode from the I2C device auto*/
   visible_and_ir = wiringPiI2CReadReg16(fd, TSL2561_REGISTER_CHAN0_LOW);
-  TSL2561_POWERON(fd);
+  TSL2561_POWEROFF(fd);
 return visible_and_ir*2;
 }
 
-void main(){
-  int lux;
+int main(){
+  int lux, x;
   int fd = 0;
   fd = wiringPiI2CSetup(TSL2561_ADDR_FLOAT);
 
-  while(1){
+  for(x=0;x<15; x++){
     lux = getLux(fd);
     /*system("tput clear");*/
     printf("Lux: %d\n", lux);
-
   }
+  return 0;
 }

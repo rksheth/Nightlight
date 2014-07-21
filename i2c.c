@@ -6,6 +6,7 @@
 #include <wiringPi.h>
 #include <wiringPiI2C.h>
 #include <stdio.h>
+#include <inttypes.h>
 #include "i2c.h"
 
 
@@ -14,8 +15,8 @@
 * Some Function Macros to clean things up
 */
 
-#define TSL2561_POWERON(int fd) wiringPiI2CWriteReg8(fd, TSL2561_COMMAND_BIT, TSL2561_CONTROL_POWERON)
-#define TSL2561_POWEROFF(int fd) wiringPiI2CWriteReg8(fd, TSL2561_COMMAND_BIT, TSL2561_CONTROL_POWEROFF)
+#define TSL2561_POWERON(fd) wiringPiI2CWriteReg8(fd, TSL2561_CMD_BIT, TSL2561_CTRL_PAYLOAD_ON)
+#define TSL2561_POWEROFF(fd) wiringPiI2CWriteReg8(fd, TSL2561_CMD_BIT, TSL2561_CTRL_PAYLOAD_OFF)
 
 /* #############################################
    Main processing function
@@ -25,6 +26,7 @@ int main(int argc, char * argv[]){
 	
 
     int i, fd;
+    uint16_t data;
     unsigned short int rawVisible, rawInfra;
     fd = wiringPiI2CSetup(TSL2561_DEVICE_ADDRESS);
     if(fd < 0){
@@ -35,15 +37,19 @@ int main(int argc, char * argv[]){
 
     TSL2561_POWERON(fd);
     /*Light Sensor data is ready 400 ms after power on*/
-    printSensorId(fd);
+   /* printSensorId(fd);*/
+    wiringPiI2CWriteReg8(fd, TSL2561_REGISTER_TIMING, TSL2561_GAIN_AUTO);     
+    printf("Reading frm Ch0 Low Reg: 0x%x", TSL2561_SELECT_CH0_LOW_REG);
     /*make this a while(1) loop*/
     for(i = 0; i < 10; i++){
         /*(while loop) user can type 'exit' to quit*/
-        delay(403);
+        delay(500);
         /*read data out from sensor*/
-       readRawData(fd, &rawVisible, &rawInfra);
+      // readRawData(fd, &rawVisible, &rawInfra);
+         data = wiringPiI2CReadReg16(fd, TSL2561_SELECT_CH0_LOW_REG);
+         printf("Raw Data: %d \n", data); 
         /*just print values to the screen for now*/
-        printf("Visible: 0x%x. Infra: 0x%x. \n", rawVisible, rawInfra);
+       // printf("Visible: 0x%x. Infra: 0x%x. \n", rawVisible, rawInfra);
     }
     
     TSL2561_POWEROFF(fd);
@@ -79,9 +85,12 @@ void readRawData(int fd, unsigned short int * rawVisible, unsigned short int * r
     /*do we have to write the timing register?*/
     /*Do this as a struct & memset*/
     char reading[2];
-    *reading = wiringPiI2CReadReg16(fd, TSL2561_REGISTER_CHAN0_LOW);
-    *rawVisible = reading[0];
-    *rawInfra = reading[1];
+    int data;
+    /* *reading = wiringPiI2CReadReg16(fd, TSL2561_SELECT_CH0_LOW_REG);*/
+    data = wiringPiI2CReadReg16(fd, TSL2561_SELECT_CH0_LOW_REG);
+    *rawVisible = data & 0xF;
+    *rawInfra = data & 0xF0;
+    printf("rawData = %d", data);
     return;
 }
 
