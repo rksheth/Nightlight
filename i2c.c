@@ -52,22 +52,14 @@ int main(int argc, char * argv[]){
     TSL2561_POWEROFF(fd);
     return 0;
 
-
-
- /*
-
-
-	}
-*/	
-
-
 }
 
 void adjustNightlight(unsigned short int * rawVisible){
     int quantLevel;
 
     /*scale this somehow*/
-    quantLevel = *rawVisible;
+    quantLevel = PWM_MAX_VALUE - *rawVisible;
+    quantLevel = (quantLevel > 0) ? quantLevel : 0;
     pwmWrite(PWM_PIN, quantLevel);
 }
 
