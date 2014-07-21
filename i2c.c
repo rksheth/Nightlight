@@ -27,16 +27,24 @@ int main(int argc, char * argv[]){
     printf("Opened Device at I2C address %x. File handle %d. \n", TSL2561_DEVICE_ADDRESS, fd);
 
     TSL2561_POWERON(fd);
-    /*Light Sensor data is ready 400 ms after power on*/
+
+    /*Static inline function for clarity*/
+    wiringPiSetupGpio();
+    pinMode(PWM_PIN, PWM_OUTPUT);
+
    /* printSensorId(fd);*/
-    wiringPiI2CWriteReg8(fd, TSL2561_REGISTER_TIMING, TSL2561_GAIN_AUTO);     
+    TSL2561_AUTOGAIN(fd);   
     printf("Reading frm Ch0 Low Reg: 0x%x", TSL2561_SELECT_CH0_LOW_REG);
-    /*make this a while(1) loop*/
-    for(i = 0; i < 10; i++){
-        /*(while loop) user can type 'exit' to quit*/
+
+    /*make this a while(1) loop, handle user exiting*/
+    for(i = 0; i < 10000; i++){
+
+        /*Light Sensor data is ready 400 ms after power on*/
         delay(500);
+
         /*read data out from sensor*/
         readRawData(fd, &rawVisible, &rawInfra);
+
         /*just print values to the screen for now*/
         printf("Visible: 0x%x. Infra: 0x%x. \n", rawVisible, rawInfra);
     }
@@ -47,25 +55,20 @@ int main(int argc, char * argv[]){
 
 
  /*
-    int i;
-	wiringPiSetupGpio();
-    pinMode(PWM_PIN, PWM_OUTPUT);
 
-	while(1){
-		for(i = 0; i < PWM_MAX_VALUE; i++){
-			pwmWrite(PWM_PIN, i);
-			delay(5);
-		}
-		
-		for(; i > 0; i--){
-			pwmWrite(PWM_PIN, i);
-			delay(5);
-		}
 
 	}
 */	
 
 
+}
+
+void adjustNightlight(unsigned short int * rawVisible){
+    int quantLevel;
+
+    /*scale this somehow*/
+    quantLevel = *rawVisible;
+    pwmWrite(PWM_PIN, quantLevel);
 }
 
 void readRawData(int fd, unsigned short int * rawVisible, unsigned short int * rawInfra){

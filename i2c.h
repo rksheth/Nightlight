@@ -1,5 +1,5 @@
 /* #############################################
-   Globals
+    Globals
    #############################################*/
 #define PWM_PIN           18
 #define PWM_MAX_VALUE     1024
@@ -32,6 +32,7 @@
 
 #define TSL2561_POWERON(fd) wiringPiI2CWriteReg8(fd, TSL2561_CMD_BIT, TSL2561_CTRL_PAYLOAD_ON)
 #define TSL2561_POWEROFF(fd) wiringPiI2CWriteReg8(fd, TSL2561_CMD_BIT, TSL2561_CTRL_PAYLOAD_OFF)
+#define TSL2561_AUTOGAIN(fd) wiringPiI2CWriteReg8(fd, TSL2561_REGISTER_TIMING, TSL2561_GAIN_AUTO);  
 
 
 /* #############################################
