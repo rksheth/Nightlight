@@ -1,5 +1,5 @@
 /* #############################################
-   Some #defined Globals
+   Globals
    #############################################*/
 #define PWM_PIN           18
 #define PWM_MAX_VALUE     1024
@@ -26,23 +26,16 @@
 #define TSL2561_REGISTER_TIMING            (0x81)
 
 
-/*
-#define TSL2561_SELECT_ID_REG 0x0A
-#define TSL2561_SELECT_CH0_LOW_REG 0xC
-#define TSL2561_SELECT_CH0_HIGH_REG 0xD
-#define TSL2561_SELECT_CH1_LOW_REG 0xE
-#define TSL2561_SELECT_CH1_HIGH_REG 0xF
-#define TSL2561_SELECT_CTRL_REG 0x0
-*/
+/* #############################################
+   Function Macros
+   #############################################*/
 
-#define TSL2561_CH0_LOW_REG_ADDR
-#define TSL2561_CH0_HIGH_REG_ADDR
-#define TSL2561_CH1_LOW_REG_ADDR
-#define TSL2561_CH1_HIGH_REG_ADDR
+#define TSL2561_POWERON(fd) wiringPiI2CWriteReg8(fd, TSL2561_CMD_BIT, TSL2561_CTRL_PAYLOAD_ON)
+#define TSL2561_POWEROFF(fd) wiringPiI2CWriteReg8(fd, TSL2561_CMD_BIT, TSL2561_CTRL_PAYLOAD_OFF)
 
 
 /* #############################################
-   Some Function Prototypes
+   Function Prototypes
    #############################################*/
 
 void readRawData(int fd, unsigned short int * rawVisible, unsigned short int * rawInfra);

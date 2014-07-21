@@ -9,15 +9,6 @@
 #include <inttypes.h>
 #include "i2c.h"
 
-
-
-/*
-* Some Function Macros to clean things up
-*/
-
-#define TSL2561_POWERON(fd) wiringPiI2CWriteReg8(fd, TSL2561_CMD_BIT, TSL2561_CTRL_PAYLOAD_ON)
-#define TSL2561_POWEROFF(fd) wiringPiI2CWriteReg8(fd, TSL2561_CMD_BIT, TSL2561_CTRL_PAYLOAD_OFF)
-
 /* #############################################
    Main processing function
    #############################################*/
@@ -45,11 +36,9 @@ int main(int argc, char * argv[]){
         /*(while loop) user can type 'exit' to quit*/
         delay(500);
         /*read data out from sensor*/
-      // readRawData(fd, &rawVisible, &rawInfra);
-         data = wiringPiI2CReadReg16(fd, TSL2561_SELECT_CH0_LOW_REG);
-         printf("Raw Data: %d \n", data); 
+        readRawData(fd, &rawVisible, &rawInfra);
         /*just print values to the screen for now*/
-       // printf("Visible: 0x%x. Infra: 0x%x. \n", rawVisible, rawInfra);
+        printf("Visible: 0x%x. Infra: 0x%x. \n", rawVisible, rawInfra);
     }
     
     TSL2561_POWEROFF(fd);
@@ -81,16 +70,10 @@ int main(int argc, char * argv[]){
 
 void readRawData(int fd, unsigned short int * rawVisible, unsigned short int * rawInfra){
     
-    /*conver to 16 bit read?*/
-    /*do we have to write the timing register?*/
-    /*Do this as a struct & memset*/
-    char reading[2];
-    int data;
-    /* *reading = wiringPiI2CReadReg16(fd, TSL2561_SELECT_CH0_LOW_REG);*/
-    data = wiringPiI2CReadReg16(fd, TSL2561_SELECT_CH0_LOW_REG);
-    *rawVisible = data & 0xF;
-    *rawInfra = data & 0xF0;
-    printf("rawData = %d", data);
+    /*Channel 0 has both Infrared & Visible Light*/
+    *rawVisible = wiringPiI2CReadReg16(fd, TSL2561_SELECT_CH0_LOW_REG);
+    /*Channel 1 has just Infrared Light*/
+    *rawInfra = wiringPiI2CReadReg16(fd, TSL2561_SELECT_CH1_LOW_REG);
     return;
 }
 
