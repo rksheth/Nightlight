@@ -33,7 +33,9 @@ int main(int argc, char * argv[]){
     pinMode(PWM_PIN, PWM_OUTPUT);
 
    /* printSensorId(fd);*/
-    TSL2561_AUTOGAIN(fd);   
+
+    /*Set integration time and gain*/
+    TSL2561_TIMING_GAIN(fd);   
     printf("Reading frm Ch0 Low Reg: 0x%x", TSL2561_SELECT_CH0_LOW_REG);
 
     /*make this a while(1) loop, handle user exiting*/
