@@ -39,5 +39,6 @@
    Function Prototypes
    #############################################*/
 
+void adjustNightlight(unsigned short int rawVisible);
 void readRawData(int fd, unsigned short int * rawVisible, unsigned short int * rawInfra);
 void printSensorId(int fd);

@@ -17,7 +17,6 @@ int main(int argc, char * argv[]){
 	
 
     int i, fd;
-    uint16_t data;
     unsigned short int rawVisible, rawInfra;
     fd = wiringPiI2CSetup(TSL2561_DEVICE_ADDRESS);
     if(fd < 0){
@@ -34,7 +33,7 @@ int main(int argc, char * argv[]){
 
    /* printSensorId(fd);*/
     TSL2561_AUTOGAIN(fd);   
-    printf("Reading frm Ch0 Low Reg: 0x%x", TSL2561_SELECT_CH0_LOW_REG);
+    printf("Reading frm Ch0 Low Reg: 0x%x\n", TSL2561_SELECT_CH0_LOW_REG);
 
     /*make this a while(1) loop, handle user exiting*/
     for(i = 0; i < 10000; i++){
@@ -45,24 +44,32 @@ int main(int argc, char * argv[]){
         /*read data out from sensor*/
         readRawData(fd, &rawVisible, &rawInfra);
 
+        /*Update nightlight brightness*/
+        adjustNightlight(rawVisible);
+
         /*just print values to the screen for now*/
         printf("Visible: 0x%x. Infra: 0x%x. \n", rawVisible, rawInfra);
     }
     
+    /*RUSHI FIX make this a macro*/
+    pwmWrite(PWM_PIN, 0);
     TSL2561_POWEROFF(fd);
     return 0;
 
 }
 
-void adjustNightlight(unsigned short int * rawVisible){
+void adjustNightlight(unsigned short int rawVisible){
     int quantLevel;
 
     /*scale this somehow*/
-    quantLevel = PWM_MAX_VALUE - *rawVisible;
+    quantLevel = PWM_MAX_VALUE - rawVisible*10;
     quantLevel = (quantLevel > 0) ? quantLevel : 0;
+    printf("Writing LED with value: 0x%x\n", quantLevel);
     pwmWrite(PWM_PIN, quantLevel);
 }
 
+
+/*Rushi FIX - this should take a pointer to a struct with all the data instead*/
 void readRawData(int fd, unsigned short int * rawVisible, unsigned short int * rawInfra){
     
     /*Channel 0 has both Infrared & Visible Light*/
